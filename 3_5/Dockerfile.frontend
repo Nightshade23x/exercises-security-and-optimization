@@ -1,0 +1,16 @@
+
+FROM node:16-bullseye
+
+WORKDIR /app
+
+RUN npm install -g serve@14 && chown node:node /app
+
+COPY --chown=node:node code/example-frontend/ .
+
+USER node
+
+RUN npm install && npm run build
+
+EXPOSE 5001
+
+CMD ["serve", "-s", "-l", "5001", "build"]

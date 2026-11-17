@@ -1,0 +1,16 @@
+
+FROM golang:1.24-alpine
+
+WORKDIR /app
+
+COPY code/example-backend/ .
+
+RUN go mod tidy && CGO_ENABLED=0 go build -o server . && \
+    addgroup -S app && adduser -S app -G app && \
+    chown -R app:app /app
+
+USER app
+
+EXPOSE 8080
+
+CMD ["./server"]
