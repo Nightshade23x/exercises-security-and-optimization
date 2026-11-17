@@ -9,6 +9,8 @@ RUN go mod tidy && CGO_ENABLED=0 go build -o server . && \
     addgroup -S app && adduser -S app -G app && \
     chown -R app:app /app
 
+ENV REQUEST_ORIGIN=http://localhost:5001
+
 USER app
 
 EXPOSE 8080

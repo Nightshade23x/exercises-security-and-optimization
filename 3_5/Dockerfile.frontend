@@ -7,6 +7,8 @@ RUN npm install -g serve@14 && chown node:node /app
 
 COPY --chown=node:node code/example-frontend/ .
 
+ENV REACT_APP_BACKEND_URL=http://localhost:8080
+
 USER node
 
 RUN npm install && npm run build
