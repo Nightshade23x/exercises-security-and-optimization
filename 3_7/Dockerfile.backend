@@ -1,0 +1,22 @@
+
+FROM golang:1.24-alpine
+
+WORKDIR /myproject
+
+COPY code/example-backend/ .
+
+RUN go mod tidy && \
+    CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o server . && \
+    addgroup -S app && adduser -S app -G app && \
+    chown app:app server && \
+    go clean -cache -modcache && \
+    rm -rf /myproject/cache /myproject/*.go \
+           /myproject/go.mod /myproject/go.sum
+
+ENV REQUEST_ORIGIN=http://localhost:5001
+
+USER app
+
+EXPOSE 8080
+
+CMD ["./server"]

@@ -1,0 +1,19 @@
+
+FROM node:16-alpine
+
+WORKDIR /myapp
+
+COPY --chown=node:node code/example-frontend/ .
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080
+
+RUN npm install --legacy-peer-deps && \
+    npm run build && \
+    npm install -g serve@14 && \
+    rm -rf src public node_modules /root/.npm
+
+USER node
+
+EXPOSE 5001
+
+CMD ["serve", "-s", "-l", "5001", "build"]
